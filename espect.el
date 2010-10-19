@@ -3,6 +3,53 @@
 ;;; Commentary:
 ;;
 
+;;; Example configuration:
+;;
+;; (setq espect-buffer-settings
+;;       '((((:not ((:mode "^gnus") (:mode w3m-mode) (:mode "^erc")
+;;                  (:mode eshell-mode) (:mode term-mode) (:mode gud-mode))))
+;;          (lambda ()
+;;            (highlight-beyond-fill-column)))
+;;         ((:not ((:mode eshell-mode) (:mode term-mode)))
+;;          (lambda () (hl-line-mode t)))
+;;         (((:mode message-mode)
+;;           (:mode org-mode)
+;;           (:mode pod-mode)
+;;           (:mode markdown-mode)
+;;           (:mode git-commit-mode)
+;;           (:filename "\\.\\(txt\\|mkn\\)$"))
+;;          (lambda ()
+;;            (flyspell-mode 1)
+;;            (auto-fill-mode 1)))
+;;         (((:mode c-mode)
+;;           (:mode cperl-mode)
+;;           (:mode emacs-lisp-mode))
+;;          (lambda ()
+;;            (flyspell-prog-mode)))
+;;         (((:project "perl"))
+;;          (lambda ()
+;;            (when (save-excursion
+;;                    (goto-char (point-min))
+;;                    (re-search-forward "\t" nil t))
+;;              (setq
+;;               tab-width 8
+;;               indent-tabs-mode t))))
+;;         (((:project "Sub-Name"))
+;;          (lambda ()
+;;            (setq
+;;             tab-width 8
+;;             indent-tabs-mode t
+;;             c-basic-offset 8)))
+;;         (((:project "Memoize"))
+;;          (lambda ()
+;;            (setq
+;;             tab-width 8
+;;             indent-tabs-mode t)))
+;;         (((:project "gnus"))
+;;          (lambda ()
+;;            (setq tab-width 8)))))
+
+
 ;;; Code:
 
 (defvar espect-buffer-settings)
