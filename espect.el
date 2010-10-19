@@ -79,23 +79,32 @@ ARGS is the argument list to apply to the rule."
     (when (not rule) (error "No espect rule %s" name))
     (apply rule args)))
 
-(defun espect-eval-conditions (list)
-  "Evaluate, in order, each rule in LIST with `espect-eval-rule', returning nil as soon as a condition returns nil.  Otherwise return true."
+(defun espect-handle-rule (rule)
+  (cond ((and (listp rule) (listp (car rule)))
+         (espect-and-list rule))
+        ((listp rule)
+         (espect-eval-rule (car rule) (cdr rule)))
+        (t (error "Invalid rule '%s': must be a rule/args list or list of lists"))))
+
+(defun espect-or-list (list)
   (let ((rule (car list))
         (rest (cdr list)))
-    (and (espect-eval-rule (car rule) (cdr rule))
-         (or (null rest)
-             (espect-eval-conditions rest)))))
+    (or (espect-handle-rule rule)
+        (if (null rest) nil (espect-or-list rest)))))
+
+(defun espect-and-list (list)
+  (let ((rule (car list))
+        (rest (cdr list)))
+    (and (espect-handle-rule rule)
+         (or (null rest) (espect-and-list rest)))))
 
 (defun espect-eval-script (list) ;; list = (rule rule ... code)
   (let* ((reversed (reverse list))
          (code (car reversed))
          (rules (reverse (cdr reversed))))
-    (message "%s %s" code rules)
-    (when (espect-eval-conditions rules) (funcall code))))
+    (when (espect-or-list rules) (funcall code))))
 
-
-(define-espect-rule :not (&rest xs)       (not (espect-eval-conditions xs)))
+(define-espect-rule :not (&rest xs)       (not (espect-or-list xs)))
 (define-espect-rule :fun (fun &rest args) (apply fun args))
 (define-espect-rule :mode (mode)          (cond ((stringp mode) (string-match mode (format "%s" major-mode)))
                                                 ((symbolp mode) (eq mode major-mode))
