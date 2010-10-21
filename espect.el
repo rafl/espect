@@ -2,6 +2,12 @@
 
 ;;; Commentary:
 
+;; This software is Copyright (c) 2010 by Florian Ragwitz, Rohn Jockway
+;;
+;; This is free software, licensed under:
+;;
+;;  The GNU General Public License, Version 2, June 1991
+
 ;; This mode makes it easy to configure settings for individual
 ;; buffers with a concice and extensible mini-language.  It abstracts
 ;; away common configuration selection tasks, like checking the mode
