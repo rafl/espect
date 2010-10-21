@@ -119,8 +119,6 @@ ARGS is the argument list to apply to the rule."
 (defvar espect-buffer-settings nil
   "List of espect scripts to run for every new buffer.")
 
-;; FIXME: doesn't seem to work entirely when opening new files with emacsclient
-;; or emacs -nw from the commandline
 (defun espect-apply-buffer-settings (settings)
   (dolist (script espect-buffer-settings) (espect-eval-script script)))
 
